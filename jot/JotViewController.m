@@ -42,6 +42,7 @@
         self.drawingContainer.delegate = self;
         
         _pointsArray = [[NSMutableArray alloc] init];
+        _firstPointsArray = [[NSMutableArray alloc] init];
         
         _font = self.textView.font;
         self.textEditView.font = self.font;
@@ -355,7 +356,7 @@
 {
     if (self.state == JotViewStateDrawing) {
         [self.drawView drawTouchEnded];
-        [self.pointsArray addObject:self.firstPointsArray];
+        [self.pointsArray addObject:self.firstPointsArray.copy];
         [self.firstPointsArray removeAllObjects];
     }
 }
