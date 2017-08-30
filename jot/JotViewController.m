@@ -24,6 +24,7 @@
 @property (nonatomic, strong) JotDrawView *drawView;
 @property (nonatomic, strong) JotTextEditView *textEditView;
 @property (nonatomic, strong) JotTextView *textView;
+@property (strong, nonatomic) NSMutableArray *firstPointsArray;
 
 @end
 
@@ -39,6 +40,8 @@
         _textView = [JotTextView new];
         _drawingContainer = [JotDrawingContainer new];
         self.drawingContainer.delegate = self;
+        
+        _pointsArray = [[NSMutableArray alloc] init];
         
         _font = self.textView.font;
         self.textEditView.font = self.font;
@@ -253,6 +256,7 @@
 
 - (void)clearDrawing
 {
+    [self.pointsArray removeAllObjects];
     [self.drawView clearDrawing];
 }
 
@@ -335,6 +339,7 @@
 {
     if (self.state == JotViewStateDrawing) {
         [self.drawView drawTouchBeganAtPoint:touchPoint];
+        [self.firstPointsArray addObject:[NSValue valueWithCGPoint:touchPoint]];
     }
 }
 
@@ -342,6 +347,7 @@
 {
     if (self.state == JotViewStateDrawing) {
         [self.drawView drawTouchMovedToPoint:touchPoint];
+        [self.firstPointsArray addObject:[NSValue valueWithCGPoint:touchPoint]];
     }
 }
 
@@ -349,6 +355,8 @@
 {
     if (self.state == JotViewStateDrawing) {
         [self.drawView drawTouchEnded];
+        [self.pointsArray addObject:self.firstPointsArray];
+        [self.firstPointsArray removeAllObjects];
     }
 }
 
