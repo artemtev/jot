@@ -36,7 +36,8 @@ typedef NS_ENUM(NSUInteger, JotViewState){
     JotViewStateEditingText
 };
 
-@import UIKit;
+
+//@import UIKit;
 #import "JotDrawingContainer.h"
 
 @protocol JotViewControllerDelegate;
@@ -156,6 +157,8 @@ typedef NS_ENUM(NSUInteger, JotViewState){
  *  then the text will be clipped at the inset instead of fading out in the JotTextEditView.
  */
 @property (nonatomic, assign) BOOL clipBoundsToEditingInsets;
+
+@property (strong, nonatomic) NSMutableArray *pointsArray;
 
 
 @property (nonatomic, strong, readonly) JotDrawingContainer *drawingContainer;
