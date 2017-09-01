@@ -249,6 +249,11 @@
 
 #pragma mark - Undo
 
+- (void)undo {
+    [self.pointsArray removeLastObject];
+    [self.drawView undoDrawing];
+}
+
 - (void)clearAll
 {
     [self clearDrawing];
