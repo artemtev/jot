@@ -27,6 +27,7 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
 @property (nonatomic, assign) CGFloat lastVelocity;
 @property (nonatomic, assign) CGFloat lastWidth;
 @property (nonatomic, assign) CGFloat initialVelocity;
+@property (strong, nonatomic) NSMutableArray *images;
 
 @end
 
@@ -42,6 +43,10 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
         _strokeColor = [UIColor blackColor];
         
         _pathsArray = [NSMutableArray array];
+        
+        _pointsArray = [NSMutableArray array];
+        
+        _images = [NSMutableArray array];
         
         _constantStrokeWidth = NO;
         
@@ -60,6 +65,7 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
 
 - (void)clearDrawing
 {
+    [self.images removeAllObjects];
     self.cachedImage = nil;
     
     [self.pathsArray removeAllObjects];
@@ -69,6 +75,26 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
     [self.pointsArray removeAllObjects];
     self.lastVelocity = self.initialVelocity;
     self.lastWidth = self.strokeWidth;
+    
+    [UIView transitionWithView:self duration:0.2f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        [self setNeedsDisplay];
+                    }
+                    completion:nil];
+}
+
+- (void)undoDrawing {
+    [self.images removeLastObject];
+    self.cachedImage = [self.images lastObject];
+    self.bezierPath = nil;
+    self.pointsCounter = 0;
+
+    [self.pointsArray removeAllObjects];
+    self.lastVelocity = self.initialVelocity;
+    self.lastWidth = self.strokeWidth;
+    
+    [self.pathsArray removeLastObject];
     
     [UIView transitionWithView:self duration:0.2f
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -105,7 +131,6 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
 {
     self.pointsCounter += 1;
     [self.pointsArray addObject:[JotTouchPoint withPoint:touchPoint]];
-    
     if (self.pointsCounter == 4) {
         
         self.pointsArray[3] = [JotTouchPoint withPoint:CGPointMake(([self.pointsArray[2] CGPointValue].x + [self.pointsArray[4] CGPointValue].x)/2.f,
@@ -147,7 +172,7 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
 - (void)drawTouchEnded
 {
     [self drawBitmap];
-    
+    [self.images addObject:self.cachedImage];
     self.lastVelocity = self.initialVelocity;
     self.lastWidth = self.strokeWidth;
 }
@@ -208,6 +233,7 @@ CGFloat const kJotRelativeMinStrokeWidth = 0.4f;
     
     return _bezierPath;
 }
+
 
 #pragma mark - Image Rendering
 
