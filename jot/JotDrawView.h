@@ -50,6 +50,8 @@
  */
 - (void)clearDrawing;
 
+- (void)undoDrawing;
+
 /**
  *  Tells the JotDrawView to handle a touchesBegan event.
  *
