@@ -233,4 +233,6 @@ typedef NS_ENUM(NSUInteger, JotViewState){
  */
 - (void)jotViewController:(JotViewController *)jotViewController isEditingText:(BOOL)isEditing;
 
+- (void)jotViewController:(JotViewController *)jotViewController hasMadeAction:(NSString *)actionName;
+
 @end
