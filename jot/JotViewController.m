@@ -346,6 +346,7 @@
     if (self.state == JotViewStateDrawing) {
         [self.drawView drawTouchBeganAtPoint:touchPoint];
         [self.firstPointsArray addObject:[NSValue valueWithCGPoint:touchPoint]];
+        [self.delegate jotViewController:self hasMadeAction:@"touch_began"];
     }
 }
 
@@ -363,6 +364,7 @@
         [self.drawView drawTouchEnded];
         [self.pointsArray addObject:self.firstPointsArray.copy];
         [self.firstPointsArray removeAllObjects];
+        [self.delegate jotViewController:self hasMadeAction:@"touch_ended"];
     }
 }
 
